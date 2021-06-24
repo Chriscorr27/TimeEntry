@@ -27,7 +27,7 @@ def signin(request):
         user = authenticate(request,username=username,password=password)
         if user is not None:
             login(request,user)
-            return redirect('index')
+            return redirect('task')
         else:
             errmsg="invalid credentials"
         #print(username+" "+password)
@@ -43,7 +43,7 @@ def signup(request):
         form = UserForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('index')
+            return redirect('login')
         else:
             errormsg = form.errors
             
