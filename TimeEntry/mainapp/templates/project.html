@@ -1,0 +1,85 @@
+{% extends 'layout.html' %}
+{% load static %}
+{% block content %}
+<h3 class="text-center my-3">Projects</h3>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Project Name</th>
+            <th scope="col">total Task</th>
+            <th scope="col">End Project</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for project in projects%}
+        <tr>
+
+            <th scope="row">{{project.project_name}}</td>
+            <td>{{project.count}}</td>
+            <td>{% if project.status %} <button class="btn text-white bg-dark endproject" data-project="{{project.id}}">End</button> {% else %}  {% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<div class="container text-center ">
+    <button type="button" id="startForm" class="btn btn-secondary btn-lg" onclick="visibleProjectForm()">Create Project</button>
+</div>
+<div class="container " id="form" style="display:none;width: 60%;">
+    <form class="mt-3" method="POST"  action="">
+        {% csrf_token %}
+        <div class="form-group row">
+            <label for="inputPassword" class="col-sm-2 col-form-label">Project Name</label>
+            <div class="col-sm-10">
+                <input type="text" class="form-control" name="projectname" id="taskName" placeholder="Project name" required>
+            </div>
+        </div> 
+        <div class="container text-center ">
+            <button type="submit" id="createTask" class="mr-3 btn btn-secondary btn-lg">create</button>
+            <!-- <a href="#">cancel</a> -->
+            <button type="button" id="cancel"  class="btn btn-danger text-white btn-lg" onclick="invisibleProjectForm()" >cancel</button>
+        </div> 
+    </form>
+    
+</div>
+
+<script>
+    var endBtn = document.getElementsByClassName("endproject")
+    for(var i=0;i<endBtn.length;i++){
+        endBtn[i].addEventListener('click',function(){
+            var project_id = this.dataset.project
+            //console.log(project_id)
+            endProject(project_id)
+        });
+    }
+
+    function endProject(project_id){
+        console.log("end project...")
+        
+        var url = 'endproject'
+        fetch(url,{
+            method:'POST',
+            headers:{
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken
+            },
+            body : JSON.stringify({'project_id':project_id})
+        })
+        .then((response)=>{
+            return response.json()
+        })
+        .then((data)=>{
+            location.reload()
+        });
+    }
+
+    function visibleProjectForm() {
+        $("#startForm").slideToggle("slow");
+        $("#form").slideToggle("slow");
+    }
+
+    function invisibleProjectForm() {
+        $("#form").slideToggle("slow");
+        $("#startForm").slideToggle("slow"); 
+    }
+</script>
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div id="flip">Click to slide down panel</div>
+<div id="panel">Hello world!</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script> 
+    $(document).ready(function(){
+      $("#flip").click(function(){
+        $("#flip").hide();
+        $("#panel").slideDown("slow");
+      });
+    });
+</script>
+    <style> 
+    
+    
+    #panel {
+      display: none;
+    }
+</style>
+</body>
+{% endblock %}
